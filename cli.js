@@ -28,7 +28,7 @@ function runSearch() {
                 "View departments",
                 "View roles",
                 "View employees",
-                "Update employee role",
+                "Update employee role ID",
                 "Exit"
             ]
         })
@@ -58,8 +58,8 @@ function runSearch() {
                     viewEmployees();
                     break;
 
-                case "Update employee role":
-                    updateEmployeeRole();
+                case "Update employee role ID":
+                    updateEmployeeRoleId();
                     break;
 
                 case "Exit":
@@ -199,6 +199,29 @@ function viewEmployees() {
         console.table(res);
         runSearch();
     });
+};
+
+function updateEmployeeRoleId() {
+    inquirer
+        .prompt([{
+            name: "employeeid",
+            type: "input",
+            message: "Which employee would you like to update (use employee ID)?"
+        },
+        {
+            name: "roleid",
+            type: "input",
+            message: "What role would you like to update to (use role ID)?"
+        }
+        ])
+        .then(function (answer) {
+            var query = "UPDATE employee SET ? WHERE ?";
+            connection.query(query, [{ role_id: answer.roleid }, { id: answer.employeeid }], function (err, res) {
+                if (err) throw err;
+                console.log("Successfully updated employee role!");
+                runSearch();
+            });
+        });
 };
 
 
